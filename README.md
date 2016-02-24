@@ -15,5 +15,7 @@ MegatoolsInstall: C:\Users\Username\Downloads\megatools-1.9.97-win32
 interval_seconds: 120
 zip_files: True
 
+Or, alternately, leave these fields blank if your path variable is set to include those directories
+
 3. Add all client's Mega username and password to the spreadsheet 'accounts.csv'
 4. will finish this readme later
