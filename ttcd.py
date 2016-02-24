@@ -360,7 +360,6 @@ zip7Path=Config.get('file','7ZipInstall')+'/'
 print '7zpath: '+zip7Path
 test=Config.get('other','test')
 print 'test: '+test+'^'+str(test=='')
-sys.exit()
 ensureFolderExists(thisdir+'/downloads')
 ensureFolderExists(thisdir+'/temp')
 while True:
