@@ -1,0 +1,7 @@
+[file]
+DelugeInstall:
+MegatoolsInstall:
+7ZipInstall:
+[other]
+interval_seconds: 120
+zip_files: True
