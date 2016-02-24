@@ -110,7 +110,7 @@ def createTorrentFromMagnet(magnetstr,hash):
 	#'"'+delugePath+'/deluge-console.exe" add -p downloads/
 	#args=shlex.split('"'+delugePath+'/deluge-console.exe" add -p downloads/'+hash+' "'+magnetstr+'"')
 	
-	args=shlex.split('"'+delugePath+'/deluge-console.exe" add -p "'+thisdir+'/downloads/'+hash+'" '+magnetstr)
+	args=shlex.split('"'+delugePath+'deluge-console" add -p "'+thisdir+'/downloads/'+hash+'" '+magnetstr)
 	
 	print '\nadding torrent: '+str(args)
 	process = Popen(args, stdout=PIPE, stderr=PIPE)
@@ -130,14 +130,14 @@ def megaUpdateFiles(username,password,hash):
 	name=completedStatus[hash][0]
 	finishedTorrenting=completedStatus[hash][1]
 	print 'creating mega folder for torrent'
-	args=shlex.split('"'+megatoolsPath+'/megamkdir" -u '+username+' -p '+password+' /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash)
+	args=shlex.split('"'+megatoolsPath+'megamkdir" -u '+username+' -p '+password+' /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash)
 	print 'args2:'+str(args)
 	process = Popen(args, stdout=PIPE, stderr=PIPE)
 	stdout2, stderr2 = process.communicate()
 	print '\noutput: '+stdout2+'\n'+stderr2+'^'
 	
 	print 'removing mega folder for status'
-	args=shlex.split('"'+megatoolsPath+'/megarm" -u '+username+' -p '+password+' /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+'/status')
+	args=shlex.split('"'+megatoolsPath+'megarm" -u '+username+' -p '+password+' /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+'/status')
 	print 'args2:'+str(args)
 	process = Popen(args, stdout=PIPE, stderr=PIPE)
 	stdout2, stderr2 = process.communicate()
@@ -145,7 +145,7 @@ def megaUpdateFiles(username,password,hash):
 	
 	if not finishedTorrenting:
 		print 'creating mega folder for status'
-		args=shlex.split('"'+megatoolsPath+'/megamkdir" -u '+username+' -p '+password+' /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+'/status')
+		args=shlex.split('"'+megatoolsPath+'megamkdir" -u '+username+' -p '+password+' /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+'/status')
 		print 'args2:'+str(args)
 		process = Popen(args, stdout=PIPE, stderr=PIPE)
 		stdout2, stderr2 = process.communicate()
@@ -154,7 +154,7 @@ def megaUpdateFiles(username,password,hash):
 		print stdout2+stderr2
 		if os.path.exists('downloads/'+hash+'/status'):
 			print 'adding new status file'
-			args=shlex.split('"'+megatoolsPath+'/megacopy" -u '+username+' -p '+password+' --remote  /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+'/status --local '+'downloads/'+hash+'/status')
+			args=shlex.split('"'+megatoolsPath+'megacopy" -u '+username+' -p '+password+' --remote  /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+'/status --local '+'downloads/'+hash+'/status')
 			print 'args3:'+str(args)
 			process = Popen(args, stdout=PIPE, stderr=PIPE)
 			stdout2, stderr2 = process.communicate()
@@ -180,7 +180,7 @@ def megaUpdateFiles(username,password,hash):
 	
 		print 'adding the final files'
 		if not zipFiles:
-			args=shlex.split('"'+megatoolsPath+'/megacopy" -u '+username+' -p '+password+' --remote  /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+' --local .')#"'+copydir+'"')
+			args=shlex.split('"'+megatoolsPath+'megacopy" -u '+username+' -p '+password+' --remote  /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+' --local .')#"'+copydir+'"')
 			print 'args3:'+str(args)
 			process = Popen(args, stdout=PIPE, stderr=PIPE)
 			stdout2, stderr2 = process.communicate()
@@ -190,7 +190,7 @@ def megaUpdateFiles(username,password,hash):
 			zipname=None
 			for file in os.listdir('.'):
 				if not file=='status':
-					args=shlex.split('"'+zip7Path+'/7z" a "'+thisdir+'/temp/'+name+'.zip" "'+file+'"')#"'+copydir+'"')
+					args=shlex.split('"'+zip7Path+'7z" a "'+thisdir+'/temp/'+name+'.zip" "'+file+'"')#"'+copydir+'"')
 					print 'args3:'+str(args)
 					process = Popen(args, stdout=PIPE, stderr=PIPE)
 					stdout2, stderr2 = process.communicate()
@@ -215,7 +215,7 @@ def megaUpdateFiles(username,password,hash):
 						# print '\noutput: '+stdout2+'\n'+stderr2+'^'
 					# print 'fileesrthsrthre:'+file
 			if not zipname==None:
-				args=shlex.split('"'+megatoolsPath+'/megaput" -u '+username+' -p '+password+' --path  /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+' "'+zipname+'"')#"'+copydir+'"')
+				args=shlex.split('"'+megatoolsPath+'megaput" -u '+username+' -p '+password+' --path  /Root/TorrentToCloud/'+strToValidFilename(name)+'_'+hash+' "'+zipname+'"')#"'+copydir+'"')
 				print 'args3:'+str(args)
 				process = Popen(args, stdout=PIPE, stderr=PIPE)
 				stdout2, stderr2 = process.communicate()
@@ -228,11 +228,11 @@ def processUser(username,password):
 	print username+" , "+password
 	print "thisdir "+thisdir
 	#os.chdir(delugePath)
-	args=shlex.split('"'+delugePath+'/deluge-console.exe"')
+	args=shlex.split('"'+delugePath+'deluge-console"')
 	print 'afklwefg \n'+str(args)+'\n'+str(subprocess.check_output(args))
 	#os.chdir(megatoolsPath)
 	print os.getcwd()
-	args=shlex.split('"'+megatoolsPath+'/megals" -u '+username+' -p '+password+' --reload')
+	args=shlex.split('"'+megatoolsPath+'megals" -u '+username+' -p '+password+' --reload')
 	print args
 	
 	process = Popen(args, stdout=PIPE, stderr=PIPE)
@@ -274,7 +274,7 @@ def processUser(username,password):
 				print 'len'+str(len(magnet))
 				
 	if not hasFolder: #make the folder if it does not exist
-		args=shlex.split('"'+megatoolsPath+'/megamkdir" -u '+username+' -p '+password+' '+'/Root/TorrentToCloud')
+		args=shlex.split('"'+megatoolsPath+'megamkdir" -u '+username+' -p '+password+' '+'/Root/TorrentToCloud')
 		print args
 		megamkdir=str(subprocess.check_output(args))
 		print megamkdir
@@ -293,7 +293,7 @@ def processUser(username,password):
 		# megaget=str(subprocess.check_output(args))
 
 def updateTorrentStatus():
-	args=shlex.split('"'+delugePath+'/deluge-console.exe" info')
+	args=shlex.split('"'+delugePath+'deluge-console" info')
 	
 	print '\ntorrent info: '+str(args)
 	process = Popen(args, stdout=PIPE, stderr=PIPE)
@@ -346,9 +346,9 @@ Config = ConfigParser.ConfigParser()
 Config.read("config.txt")
 print Config.sections()
 global delugePath
-delugePath=Config.get('file','DelugeInstall')
+delugePath=Config.get('file','DelugeInstall')+'/'
 global megatoolsPath
-megatoolsPath=Config.get('file','MegatoolsInstall')
+megatoolsPath=Config.get('file','MegatoolsInstall')+'/'
 global interval
 interval=Config.getint('other','interval_seconds')
 print interval+5
@@ -356,8 +356,11 @@ global zipFiles
 zipFiles=Config.getboolean('other','zip_files')
 print 'zipfiles:'+str(zipFiles)
 global zip7Path
-zip7Path=Config.get('file','7ZipInstall')
+zip7Path=Config.get('file','7ZipInstall')+'/'
 print '7zpath: '+zip7Path
+test=Config.get('other','test')
+print 'test: '+test+'^'+str(test=='')
+sys.exit()
 ensureFolderExists(thisdir+'/downloads')
 ensureFolderExists(thisdir+'/temp')
 while True:
