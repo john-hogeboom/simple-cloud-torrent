@@ -3,7 +3,7 @@ Provide cloud torrent service; users set folder names as magnet links, files tor
 
 Host instructions:
 
-1. Install Megatools, 7Zip, Python 2.7 and Deluge.
+1. Install Megatools, 7Zip, Python 2.7, Deluge, and deluge-console.
 
 2.  Add paths to these in config file, like this (substitute own file paths):
   
