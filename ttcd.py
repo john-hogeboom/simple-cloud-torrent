@@ -224,12 +224,26 @@ def megaUpdateFiles(username,password,hash):
 		registerDownloadCompleted(hash,username)
 		
 	os.chdir(olddir)
+def processMagnetLink(username,password,magnet):
+	endhash=magnet.find('&')
+	if(endhash==-1):
+		endhash=len(magnet)
+	hash=magnet[magnet.index(mstart)+len(mstart):endhash]
+	print 'hash:'+hash
+	isNew=createTorrentFromMagnet(magnet,hash)
+	if not isNew:
+		print 'torrent not new'
+		if hash in completedStatus:
+			#add files to mega
+			print 'mega update files'
+			megaUpdateFiles(username, password, hash)
 def processUser(username,password):
 	print username+" , "+password
 	print "thisdir "+thisdir
 	#os.chdir(delugePath)
-	args=shlex.split('"'+delugePath+'deluge-console"')
-	print 'afklwefg \n'+str(args)+'\n'+str(subprocess.check_output(args))
+	#args=shlex.split('"'+delugePath+'deluge-console"')
+	#print 'args '+str(args)
+	#print 'afklwefg \n'+str(args)+'\n'+str(subprocess.check_output(args))
 	#os.chdir(megatoolsPath)
 	print os.getcwd()
 	args=shlex.split('"'+megatoolsPath+'megals" -u '+username+' -p '+password+' --reload')
@@ -244,18 +258,7 @@ def processUser(username,password):
 			print 'errpart is:'+s+'^'
 			print  'extracted magnet:^'+s[s.index("invalid '")+9:]+'^'#'##'+s+'@@\n***********\n'
 			magnet=s[s.index("invalid '")+9:]
-			endhash=magnet.find('&')
-			if(endhash==-1):
-				endhash=len(magnet)
-			hash=magnet[magnet.index(mstart)+len(mstart):endhash]
-			print 'hash:'+hash
-			isNew=createTorrentFromMagnet(magnet,hash)
-			if not isNew:
-				print 'torrent not new'
-				if hash in completedStatus:
-					#add files to mega
-					print 'mega update files'
-					megaUpdateFiles(username, password, hash)
+			processMagnetLink(username,password,magnet)
 	megals=stdout#str(subprocess.check_output(args))
 	print '\ntestfdghsru7456\n'
 	hasFolder=False
@@ -269,9 +272,10 @@ def processUser(username,password):
 			hasMagnetFile=True
 		if '/Root/TorrentToCloud' in s:
 			if 'magnet:?xt=urn:btih:' in s:
-				magnet=s[len('Root/TorrentToCloud/'):]
+				magnet=s[len('Root/TorrentToCloud/ '):]
 				print 'magnet is '+magnet
 				print 'len'+str(len(magnet))
+				processMagnetLink(username,password,magnet)
 				
 	if not hasFolder: #make the folder if it does not exist
 		args=shlex.split('"'+megatoolsPath+'megamkdir" -u '+username+' -p '+password+' '+'/Root/TorrentToCloud')
@@ -308,12 +312,12 @@ def updateTorrentStatus():
 	finished=False
 	parts=stdout.split('\nName: ')
 	for part in parts:
-		#print '\n$$$$$$$$$$$$\n'+part
+		print '\n$$$$$$$$$$$$\n'+part
 		if len(part)>50:
 			name=part[:part.index('\n')-1]
 			#print 'name:'+name+'^'
 			next=part[len(name)+2:]
-			#print 'nextinfo:'+str(next.index('ID: ')+len('ID: '))+' '+str(next.index('\n'))+'^'
+			print 'nextinfo:'+str(next.index('ID: ')+len('ID: '))+' '+str(next.index('\n'))+'^'
 			id=next[next.index('ID: ')+len('ID: '):next.index('\n')-1]
 			#print 'id:'+id+'^'
 			next=next[next.index('Size: '):]
@@ -346,9 +350,17 @@ Config = ConfigParser.ConfigParser()
 Config.read("config.txt")
 print Config.sections()
 global delugePath
-delugePath=Config.get('file','DelugeInstall')+'/'
+delugePath=Config.get('file','DelugeInstall')
+if delugePath==' ' or delugePath=='':
+	delugePath='';
+else:
+	delugePath+='/'
 global megatoolsPath
-megatoolsPath=Config.get('file','MegatoolsInstall')+'/'
+megatoolsPath=Config.get('file','MegatoolsInstall')
+if megatoolsPath==' ' or megatoolsPath=='':
+	megatoolsPath='';
+else:
+	megatoolsPath+='/'
 global interval
 interval=Config.getint('other','interval_seconds')
 print interval+5
@@ -356,10 +368,12 @@ global zipFiles
 zipFiles=Config.getboolean('other','zip_files')
 print 'zipfiles:'+str(zipFiles)
 global zip7Path
-zip7Path=Config.get('file','7ZipInstall')+'/'
+zip7Path=Config.get('file','7ZipInstall')
+if zip7Path==' ' or zip7Path=='':
+	zip7Path='';
+else:
+	zip7Path+='/'
 print '7zpath: '+zip7Path
-test=Config.get('other','test')
-print 'test: '+test+'^'+str(test=='')
 ensureFolderExists(thisdir+'/downloads')
 ensureFolderExists(thisdir+'/temp')
 while True:
