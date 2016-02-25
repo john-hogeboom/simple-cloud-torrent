@@ -232,7 +232,7 @@ def processMagnetLink(username,password,magnet):
 	print 'hash:'+hash
 	isNew=createTorrentFromMagnet(magnet,hash)
 	if not isNew:
-		print 'torrent not new'
+		print 'torrent not new '+str(hash)+str(completedStatus)
 		if hash in completedStatus:
 			#add files to mega
 			print 'mega update files'
@@ -296,6 +296,14 @@ def processUser(username,password):
 		# args=shlex.split('megaget -u '+username+' -p '+password+' /Root/TorrentToCloud/magnets.txt')
 		# megaget=str(subprocess.check_output(args))
 
+def findHashEnd(astr):
+	index=0
+	for c in astr:
+		if not c.isalnum():
+			return index
+		index+=1
+	return index-1
+
 def updateTorrentStatus():
 	args=shlex.split('"'+delugePath+'deluge-console" info')
 	
@@ -314,11 +322,16 @@ def updateTorrentStatus():
 	for part in parts:
 		print '\n$$$$$$$$$$$$\n'+part
 		if len(part)>50:
-			name=part[:part.index('\n')-1]
+			endline=part.index('\n')
+			if '\r\n' in part:
+				endline=part.index('\r\n')
+			name=part[:endline]
 			#print 'name:'+name+'^'
-			next=part[len(name)+2:]
-			print 'nextinfo:'+str(next.index('ID: ')+len('ID: '))+' '+str(next.index('\n'))+'^'
-			id=next[next.index('ID: ')+len('ID: '):next.index('\n')-1]
+			next=part[len(name):]
+			print 'ni pre:'+next
+			print 'nextinfo:'+str(next.index('ID: ')+len('ID: '))+'^ '#+str(next.index('\n'))+'^'
+			next2=next[next.index('ID: ')+len('ID: '):]
+			id=next2[:findHashEnd(next2)]#next.index('\n')-1]
 			#print 'id:'+id+'^'
 			next=next[next.index('Size: '):]
 			size=next[next.index('Size: ')+len('Size: '):next.index(' Ratio')]
