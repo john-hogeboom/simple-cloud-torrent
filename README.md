@@ -30,4 +30,4 @@ Or, alternately, leave these fields blank if your path variable is set to includ
 
 4 . Open Deluge, go to preferences > interface and disable Classic Mode, then restart Deluge and click 'Start Daemon'.
 
-5 . Open a command prompt/terminal, change directory to the folder containing ttcd.py, and run the command 'python ttcd.py'
+5 . Open a command prompt/terminal, change directory to the folder containing simple-cloud-torrent.py, and run the command 'python simple-cloud-torrent.py'
