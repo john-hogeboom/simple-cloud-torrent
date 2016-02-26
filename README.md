@@ -1,6 +1,8 @@
 # simple-cloud-torrent
 Provide cloud torrent service; users set folder names as magnet links, files torrented and uploaded.
 
+This tool is designed to let you easily start torrents remotely and recieve the resulting files, or to allow friends and family who might be intimidated by bittorrent software the chance to use your setup to easily torrent things for themselves.
+
 User instructions:
 
 1. Create Mega.nz account, provide host with your login information.
